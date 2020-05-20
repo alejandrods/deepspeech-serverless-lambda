@@ -1,0 +1,37 @@
+# Welcome to Serverless!
+#
+# Happy Coding!
+
+service: deepspeech
+app: deepspeech-app
+org: alejandrodiazsantosaws
+
+provider:
+  name: aws
+  runtime: python3.6
+  stage: dev
+  region: eu-west-1
+
+functions:
+  infer:
+    handler: infer.inferHandler
+    timeout: 30
+    events:
+      - http:
+          path: infer
+          method: post
+  health:
+    handler: infer.healthLiveness
+    timeout: 30
+    events:
+      - http:
+          path: health
+          method: get
+
+plugins:
+  - serverless-python-requirements
+custom:
+  pythonRequirements:
+    dockerizePip: true
+    slim: true
+    zip: true
